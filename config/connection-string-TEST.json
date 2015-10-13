@@ -1,0 +1,7 @@
+{ "user": "XXXX", 
+  "password": "XXXX", 
+  "server": "NO ESTA OPERATIVO.",   
+  "database": "XXXX", 
+  "stream": "true", 
+  "options": {"encrypt": "true"}
+}

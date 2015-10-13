@@ -1,0 +1,378 @@
+<div ng-controller="filterCtrl">
+    <div class="row border-bottom">
+        <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0px">
+            <div class="navbar-header">
+                <span minimaliza-sidebar></span>
+            </div>
+            <div class="col-lg-offset-1 col-lg-8">
+                <!-- INLINE     para linea de filtro completa -->
+                <form role="form" class="form-inline" style="margin-top: 15px">
+                    <!-- GROUP  calendario con filtro global x fechas, que se aparece ante el evento clic -->
+                    <div class="input-group">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-white btn-sm dropdown-toggle" ng-click="filterShowDate = (filterShowDate == 0 ? 1 : 0)">
+                            <span class="glyphicon glyphicon-calendar"></span>                                                                
+                            Global Date <span class="caret"></span>
+                            </button>
+                        </div>
+                        <div class="dsinfo-dropDown" ng-show="filterShowDate==1" style="left:0px;width:470px;">
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <p class="text-justify text-success" style="margin-left:10px;margin-right:10px;"> <strong>Rango de fechas Global</strong>
+                                        <br>
+                                        <br>
+                                        Te va a ayudar a trabajar mas rápido. 
+                                        <br>
+                                        Cualquiera de los módulos que contenga una fecha significativa, será alcanzado por el rango de fechas global, simpre y cuando haya sido definido.
+                                        <br>
+                                        Por ejemplo:
+                                        <br>                                                
+                                        Imaginemos que estas teniendo un problema en la última semana, y necesitas analizar información para los Controles, Paradas y Producción Mensual. 
+                                        <br>                                                
+                                        Seleccionas los últimos 7 días, abris cada módulo, y vas ver información correspondiente al rango que seleccionaste, evitando tener que hacerlo para cada módulo.
+                                    </p>
+                                </div>
+                                <div class="col-lg-12 btn-group btn-group-sm" role="group" style="margin-left:10px;">
+                                    <button type="button" class="btn btn-white" ng-mouseover="getGlobalDate(1, $index)" ng-repeat="ele in globalDate | filter:'grupo_1'">{{ele.name}}</button>
+                                </div>
+                                <div class="col-lg-12">
+                                    <br>
+                                </div>
+                                <div class="col-lg-12 btn-group btn-group-sm" role="group" style="margin-left:45px;">
+                                    <button type="button" class="btn btn-white" ng-mouseover="getGlobalDate(2, $index)" ng-click="getGlobalDate(2, $index)" ng-repeat="ele in globalDate | filter:'grupo_2'">{{ele.name}}</button>
+                                </div>
+                                <div class="col-lg-12">
+                                    <br>
+                                </div>
+                                <div class="col-lg-12 btn-group btn-group-sm" role="group" style="margin-left:65px;">
+                                    <button type="button" class="btn btn-white" ng-mouseover="getGlobalDate(3, $index)" ng-repeat="ele in globalDate | filter:'grupo_3'">{{ele.name}}</button>
+                                </div>
+                                <div class="col-lg-12">
+                                    <br>
+                                </div>
+                                <div class="col-lg-offset-1 col-lg-10">
+                                    <div class="panel panel-success">
+                                        <div class="panel-body">
+                                            <p class="text-center text-success" style="margin-left:10px;margin:auto; height:65px;">
+                                                {{globalDateFrom}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-offset-1 col-lg-10 input-group input-group-sm">
+                                    <input type="text" tabindex="50" id="filterDateFrom" ng-model="globalDateFrom" class="input form-control" {{globalDateFrom}}>
+                                </div>
+                                <div class="col-lg-offset-1 col-lg-10 input-group input-group-sm">
+                                    <input type="text" tabindex="51" id="filterDateTo" ng-model="globalDateTo" class="input form-control" {{globalDateTo}}>
+                                </div>
+                                <div class="col-lg-12">
+                                    <br>
+                                </div>
+                                <div class="col-lg-offset-1 col-lg-5">
+                                    <button type="button" tabindex="52" id="filterDateConfirmar" class="btn btn-primary btn-block btn-outline btn-sm" ng-click="filterShowDate=0" aria-label="Left Align">
+                                    Confirmar
+                                    </button>
+                                </div>
+                                <div class=" col-lg-5">
+                                    <button type="button" tabindex="53" id="filterDateCancelar" class="btn btn-primary btn-block btn-outline btn-sm" ng-click="filterShowDate=0" aria-label="Left Align">
+                                    Cancelar
+                                    </button>
+                                </div>
+                                <div class="col-lg-12">
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- GROUP  calendario con filtro global fin -->
+                    <div class="input-group" style="display:none">
+                        <input type="text" tabindex="1" disabled id="filterIdEntity" ng-init="filterIdEntity=1" ng-model="filterIdEntity" ng-blur="getFilterColumns()" class="input input-sm form-control" style="width:50px">
+                    </div>
+                    <div class="input-group">
+                        <select tabindex="2" id="filterColumn" autofocus ng-init="getFilterColumns()" ng-options="column.cName for column in filterColumnsFound" ng-model="filterColumnSelected" class="form-control input-sm" style="width:150px"> 
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <input type="text"  tabindex="3" id="filterCriterion" placeholder="" ng-focus="filterShow=1" ng-blur="filterShow=0" ng-model="filterCriterion" ng-change="building()" ng-keypress="keypress($event)" class="input input-sm form-control" style="width:350px">
+                        <div id="filter-show" class="dsinfo-dropDown" ng-show="filterShow==1" style="left:0px;width:350px;">
+                            <ul class="list-group">
+                                <li class="list-group-item text-success">
+                                    <!--    SHOW ayuda en pantalla, según el tipo de datos de la columna que selecciono para filtrar -->
+                                    <p class="text-success text-justify">
+                                        <ANY ng-switch on="filterColumnSelected.cType">
+                                            <ANY ng-switch-when="date">Estas armando una condición por una columna de tipo <code>Fecha</code>, es obligatorio respetar el formato <code>DD/MM/YYYY</code>. Podes agregar mas de un valor, se aceptan comas o espacios en blanco para separarlos.
+                                                <br>
+                                                <br>
+                                                Ejemplo 1:
+                                                <br>
+                                                <code>01/05/2000, 15/05/2000, 01/06/2010</code>
+                                                <br>
+                                                <br>
+                                                Ejemplo 2:
+                                                <br>
+                                                <code>01/05/2000 15/05/2000 01/06/2010 30/06/2010</code>
+                                            </ANY>
+                                            <ANY ng-switch-when="numeric">Estas armando una condición por una columna de tipo <code>Número</code>, para los decimales, debes utilizar el punto (.). Podes agregar mas de un valor, se aceptan comas o espacios en blanco para separarlos.
+                                                <br>
+                                                <br>
+                                                Ejemplo 1:
+                                                <br>
+                                                <code>300, 450, 500, 600, 750</code>
+                                                <br>
+                                                <br>
+                                                Ejemplo 2:
+                                                <br>
+                                                <code>300.15 450 500 600 750 900.99</code>
+                                            </ANY>
+                                            <ANY ng-switch-when="bit">Estas armando una condición por una columna de tipo <code>lógico</code>. Podes agregar mas de un valor, se aceptan comas o espacios en blanco para separarlos. Los valores posibles los podes visualizar en los ejemplos.
+                                                <br>
+                                                <br>
+                                                Ejemplo 1:
+                                                <br>
+                                                <code>true false null</code>
+                                                <br>
+                                                <br>
+                                                Ejemplo 2:
+                                                <br>
+                                                <code>true, false, null</code>
+                                            </ANY>
+                                            <ANY ng-switch-default>
+                                                Estas armando una condición por una columna de tipo <code>texto</code>. Podes agregar mas de un valor, se aceptan comas o espacios en blanco para separarlos, está permitido el uso del comodín (*).
+                                                <br>
+                                                <br>
+                                                Ejemplo 1:
+                                                <br>
+                                                <code>valor1 valor2 valor3 val*</code>
+                                                <br>
+                                                <br>
+                                                Ejemplo 2:
+                                                <br>
+                                                <code>valor1, el valor2, valor3, *lor*</code>
+                                            </ANY>
+                                        </ANY>
+                                    </p>
+                                </li>
+                                <li class="list-group-item  text-success">
+                                    <strong>where</strong>
+                                    <br>
+                                    {{filterWhere}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                        <button type="button" tabindex="4" id="filterAdd" class="btn btn-white btn-sm" ng-show="authentication != ''" ng-click="add()">Add</button>
+                        <span>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                        <button type="button" tabindex="5" id="filterSearch" class="btn btn-sm btn-primary" ng-show="authentication != ''" ng-click="search()">Search</button>
+                        <span>
+                    </div>
+                    <div>
+                    </div>
+                </form>
+            </div>
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown" dropdown>
+                    <a class="dropdown-toggle count-info" href dropdown-toggle>
+                    <i class="fa fa-envelope"></i> <span class="label label-warning">16</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a ui-sref="profile" class="pull-left">
+                                <img alt="image" class="img-circle" src="img/a7.jpg">
+                                </a>
+                                <div>
+                                    <small class="pull-right">46h ago</small>
+                                    <strong>Mike Loreipsum</strong> started following <strong>Monica Smith</strong>. <br>
+                                    <small class="text-muted">3 days ago at 7:58 pm - 10.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a ui-sref="profile" class="pull-left">
+                                <img alt="image" class="img-circle" src="img/a4.jpg">
+                                </a>
+                                <div>
+                                    <small class="pull-right text-navy">5h ago</small>
+                                    <strong>Chris Johnatan Overtunk</strong> started following <strong>Monica Smith</strong>. <br>
+                                    <small class="text-muted">Yesterday 1:21 pm - 11.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a ui-sref="profile" class="pull-left">
+                                <img alt="image" class="img-circle" src="img/profile.jpg">
+                                </a>
+                                <div>
+                                    <small class="pull-right">23h ago</small>
+                                    <strong>Monica Smith</strong> love <strong>Kim Smith</strong>. <br>
+                                    <small class="text-muted">2 days ago at 2:30 am - 11.06.2014</small>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="text-center link-block">
+                                <a ui-sref="mailbox.inbox">
+                                <i class="fa fa-envelope"></i> <strong>Read All Messages</strong>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown" dropdown>
+                    <a class="dropdown-toggle count-info" href dropdown-toggle>
+                    <i class="fa fa-bell"></i> <span class="label label-primary">8</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a ui-sref="inbox">
+                                <div>
+                                    <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a ui-sref="profile">
+                                <div>
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                    <span class="pull-right text-muted small">12 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a ui-sref="grid_options">
+                                <div>
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <div class="text-center link-block">
+                                <a ui-sref="miscellaneous.notify">
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="dropdown" dropdown>
+                    <a class="dropdown-toggle count-info" href dropdown-toggle ng-controller="loginCtrl">
+                        <i class="{{authenticationClass}}"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages" ng-show="authentication != ''">
+                        <li>
+                            <div class="dropdown-messages-box">
+                                <a ui-sref="profile" class="pull-left">
+                                <img alt="image" class="img-circle" src={{authentication.picture}}>
+                                </a>
+                                <div>
+                                    <strong>{{authentication.name}}</strong>
+                                    <br>
+                                    <small class="text-muted"><strong>User Name</strong></small>&nbsp&nbsp{{authentication.nickname}}
+                                    <br>
+                                    <small class="text-muted"><strong>Last Update</strong>&nbsp&nbsp{{authentication.updated_at | date:"dd.MM.yyyy"}}</small>
+                                </div>
+                            </div>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a ui-sref="miscellaneous.notify">
+                                    <small class="text-muted"><strong>User_Id</strong></small>
+                                    <br>
+                                    {{authentication.user_id}}
+                                    </a>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <div class="text-center link-block">
+                                    <a ui-sref="login" ng-controller="loginCtrl" ng-click="logout()">
+                                     <i class="fa fa-sign-out fa-5x text-danger"></i>
+                                    </a>
+                                </div>
+                            </li>
+
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a ng-click="$root.rightSidebar = !$root.rightSidebar">
+                    <i class="fa fa-tasks"></i>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+    </div>
+
+    <div class="row border-bottom" style="background: #FAFAFA; padding:0px; border-bottom-style: solid; border-bottom-color: #E2DEDE; height:30px">
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-sm btn-info">
+                <input type="checkbox" disabled autocomplete="off"> Rows found: {{rowsFound.rows}}
+            </label>
+        </div>
+        <div class="btn-group" data-toggle="buttons" ng-repeat="ele in arrWhere">
+            <label class="btn btn-white btn-white-dsinfo btn-sm" ng-click="toggle(ele)" ng-dblclick="delete(ele)" tooltip-placement="bottom" tooltip="Haciendo clic, lo deshabilitas y no se aplica en el Search, con doble clic, lo podes eliminar.">
+            <input type="checkbox" autocomplete="off"> {{ele}}
+            </label>
+        </div>
+    </div>
+    <!--    Simulación de menú, para ver como andan los state para llamar a vistas parciales
+        &nbsp&nbsp&nbsp&nbsp son espacios, entre un link y otro.
+        -->
+    <div class="row border-bottom" style="background: #FAFAFA; padding:8px; border-bottom-style: solid; border-bottom-color: #E2DEDE;">
+        <a ui-sref="google_maps">Google Maps</a>
+        &nbsp&nbsp&nbsp&nbsp
+        <a ui-sref="dashboard_1">Dashboard 1</a>
+        &nbsp&nbsp&nbsp&nbsp
+        <a ui-sref="dashboard_2">Dashboard 2</a>
+        &nbsp&nbsp&nbsp&nbsp
+        <a ui-sref="dashboard_3">Dashboard 3</a>
+        &nbsp&nbsp&nbsp&nbsp
+        <a ui-sref="dashboard_4">Dashboard 4</a>
+        &nbsp&nbsp&nbsp&nbsp
+        <a ui-sref="documents">Documents</a>
+        &nbsp&nbsp&nbsp&nbsp
+    </div>
+
+    <!--    lo dejo, no sirve para nada, pero esta el ejemplo de arrastrar botones
+        <div class="row" ui-sortable="sortableOptions" style="height:30px;margin-left:4px;">
+            <div class="btn-group" data-toggle="buttons" ng-repeat="ele in arrWhere">
+                <label class="btn btn-white btn-sm" ng-click="toggle(ele)">
+                    <input type="checkbox" autocomplete="off">{{ele}}
+                </label>
+            </div>
+        </div>
+        -->
+    <!-- lo dejo, por si anda mal el filtro real, lo voy mostrando -->
+    <!--             <div class="btn-group" data-toggle="buttons" ng-repeat="eleReal in arrWhereReal">
+        <label class="btn btn-white btn-xs">
+          <input type="checkbox" autocomplete="off">{{eleReal}}
+        </label>
+        </div> -->
+    <!-- Trae datos de la busqueda, lo dejo para probar algo rápido
+        <ul>
+        <li class="list-group-item" ng-repeat="ele in itemsFound">
+        {{ele}}
+        </li>
+        </ul>
+           -->        
+</div>

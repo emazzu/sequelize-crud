@@ -1,0 +1,7 @@
+{ "user": "xxxx", 
+  "password": "xxxx", 
+  "server": "xxxx-node-api.cloudapp.net", 
+  "database": "xxxx", 
+  "stream": "true", 
+  "options": {"encrypt": "true"}
+}

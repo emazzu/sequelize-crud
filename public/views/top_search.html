@@ -1,0 +1,141 @@
+<div class="row border-bottom white-bg" ng-controller="filterCtrl">
+
+<!--         <br>        
+ -->
+
+<!--         <div class="col-lg-offset-2 col-lg-10">
+
+                    <form role="form" class="form-inline">
+
+
+                        <div class="input-group">
+                            <input type="text" tabindex="1" id="filterIdEntity" placeholder="Id Entity?" ng-model="filterIdEntity" ng-blur="filterColumnsGet()" class="input input-sm form-control" style="width:85px">
+                        </div>
+
+                         <div class="input-group">
+                            <select tabindex="2" id="filterColumn" ng-options="column.cName for column in filterColumnsFound" ng-model="filterColumnSelected" class="form-control input-sm" style="width:180px"> 
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                              <input type="text"  tabindex="3" id="filterCriterion" placeholder="" ng-focus="filterShow=1" ng-blur="filterShow=0" ng-model="filterCriterion" ng-change="add()" class="input input-sm form-control" style="width:480px">
+
+                             <div id="filter-show" class="dsinfo-dropDown" ng-show="filterShow==1" style="left:0px;width:480px;">
+
+                                <ul class="list-group">
+
+                                    <li class="list-group-item text-success">
+
+                                        <p class="text-success">
+                                            <ANY ng-switch on="filterColumnSelected.cType">
+                                                <ANY ng-switch-when="date">Estas armando una condición por una columna de tipo <code>Fecha</code>, es obligatorio respetar el formato <code>DD/MM/YYYY</code>. Podes agregar mas de un valor, se aceptan comas o espacios en blanco para separarlos.
+                                                    <br>
+                                                    <br>
+                                                    Ejemplo 1:
+                                                    <br>
+                                                    <code>01/05/2000, 15/05/2000, 01/06/2010</code>
+                                                    <br>
+                                                    <br>
+                                                    Ejemplo 2:
+                                                    <br>
+                                                    <code>01/05/2000 15/05/2000 01/06/2010 30/06/2010</code>
+                                                </ANY>
+                                                <ANY ng-switch-when="numeric">Estas armando una condición por una columna de tipo <code>Número</code>, para los decimales, debes utilizar el punto (.). Podes agregar mas de un valor, se aceptan comas o espacios en blanco para separarlos.
+                                                    <br>
+                                                    <br>
+                                                    Ejemplo 1:
+                                                    <br>
+                                                    <code>300, 450, 500, 600, 750</code>
+                                                    <br>
+                                                    <br>
+                                                    Ejemplo 2:
+                                                    <br>
+                                                    <code>300.15 450 500 600 750 900.99</code>
+                                                    </ANY>
+                                                <ANY ng-switch-when="bit">Estas armando una condición por una columna de tipo <code>lógico</code>. Podes agregar mas de un valor, se aceptan comas o espacios en blanco para separarlos. Los valores posibles los podes visualizar en los ejemplos.
+                                                    <br>
+                                                    <br>
+                                                    Ejemplo 1:
+                                                    <br>
+                                                    <code>true false null</code>
+                                                    <br>
+                                                    <br>
+                                                    Ejemplo 2:
+                                                    <br>
+                                                    <code>true, false, null</code></ANY>
+                                                <ANY ng-switch-default>
+                                                    Estas armando una condición por una columna de tipo <code>texto</code>. Podes agregar mas de un valor, se aceptan comas o espacios en blanco para separarlos, está permitido el uso del comodín (*).
+                                                    <br>
+                                                    <br>
+                                                    Ejemplo 1:
+                                                    <br>
+                                                    <code>valor1 valor2 valor3 val*</code>
+                                                    <br>
+                                                    <br>
+                                                    Ejemplo 2:
+                                                    <br>
+                                                    <code>valor1, el valor2, valor3, *lor*</code>
+                                                </ANY>
+                                            </ANY>               
+                                        </p>
+
+                                    </li>
+
+                                    <li class="list-group-item  text-success">
+                                        select *
+                                        from <strong>pozos_vw</strong>
+                                    </li>
+
+                                    <li class="list-group-item  text-success">
+                                        <strong>where</strong>
+                                        <br>
+                                        {{text}}
+                                    </li>
+
+                               </ul>
+
+                            </div>
+
+                        </div>
+
+                        <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button type="button" tabindex="4" id="filterAdd" class="btn btn-white btn-sm" ng-click="confirm()">Add</button>
+                                <span>
+                        </div>
+
+                        <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button type="button" tabindex="5" id="filterSearch" class="btn btn-sm btn-primary" ng-click="search()">Search</button>
+                                <span>
+                        </div>
+
+                        <div>
+
+                        </div>
+
+                    </form>
+
+        </div>
+
+ -->
+<!--                                 <h5>
+                                    Columna seleccionada: {{filterColumnSelected.cName}}  de tipo:  {{filterColumnSelected.cType}} - {{main.GlobalTest}}
+                                </h5>
+ -->
+
+<!-- 
+        <hr>
+        {{text}}
+
+
+        <br>
+        <br>
+        <br>         
+
+                        <div ng-repeat="ele in itemsFound">
+                          <h5>{{ele.Well_Name}}</h5>
+                        </div>
+
+ -->
+</div>
